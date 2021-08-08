@@ -1,0 +1,7 @@
+[book]
+title = "GCP Goat"
+author = "Joshua Jebaraj"
+description = "GCP-Goat is intentionally vulnerable GCP environment to learn and practice GCP Security"
+language = "en"
+multilingual = false
+src = "src"
