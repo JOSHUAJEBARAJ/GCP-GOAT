@@ -17,39 +17,44 @@ Create the new Project by Clicking New Project
 
 Enter a Valid name and click Create
 
-Go to the [API Dashboard](https://console.cloud.google.com/apis)
+> Please note the project ID for future reference
+Once it is done click on the below link to clone the repository
 
-Click on the `ENABLE API AND SERVICES`
-
-![setup-3](images/setup-3.png)
-
-
-Search for `Compute Engine API` and click Enable
+[Clone the Repository](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/JOSHUAJEBARAJ/GCP-GOAT)
 
 
-![setup-4](images/setup-4.png)
-
-Repeat the Same for the `Kubernetes Engine API` and for the `Cloud SQL Admin API`
-
-Once you have done Go to the GCloud Shell by clicking the `terminal` icon in top right corner
+Tick the `Trust Project` and click on `CONFIRM` , It will take few seconds to clone the repository and open the cloud shell
 
 
-![setup-5](images/setup-5.png)
+Next export the project id using the below command
 
-Once you are inside the `Shell`  make sure the shell points to the current project 
+```bash
+export PROJECT_ID="project-id"
+```
 
-![](./images/2021-08-07-23-36-35.png)
+Next configure the project id using the below command
 
-clone the repository by  typing the following command in the `GCLOUD SHELL`
+```bash
+gcloud config set project $PROJECT_ID
+```
 
-``` bash
-git clone https://github.com/JOSHUAJEBARAJ/GCP-Goat.git
+Next enable the necessary services using the below command
+
+```bash
+gcloud services enable cloudresourcemanager.googleapis.com
+```
+
+```bash
+gcloud services enable iam.googleapis.com
+```
+
+```bash
+gcloud services enable compute.googleapis.com
 ```
 
 
-Move into the `Scenarios` folder by typing the following command in the `GCLOUD SHELL`
+Once it is done navigate into the scenarios directory by executing the below command
 
-``` bash
-cd GCP-Goat/scenarios/
+```bash
+cd scenarios
 ```
-

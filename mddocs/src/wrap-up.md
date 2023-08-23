@@ -1,7 +1,14 @@
-# Wrapping up
+## Wrapping up
 
 
-Once you have done the all scenarios To avoid any extra charges and to make sure all resources are deleted , Delete the project 
+It's recommended to delete the project after you are done with the GCP Goat. You can do this by running the following command: 
+
+
+```bash
+export PROJECT_ID="project-id"
+```
+
+
 
 ```bash
 gcloud projects delete PROJECT_ID

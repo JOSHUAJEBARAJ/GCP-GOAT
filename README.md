@@ -1,4 +1,4 @@
-## GCP Goat
+## GCP Goat V2 🎉
 
 GCP-Goat is intentionally vulnerable GCP environment to learn and practice GCP Security
 

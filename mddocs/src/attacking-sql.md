@@ -1,22 +1,48 @@
 ##  Attacking SQL Instance
 
-In order to start the scenario go to the `scenario-2` folder by typing the below  command in the `GCLOUD Shell`
+In order to start the scenario go to the `scenario-2` folder by typing the below  command in the shell
 
 ``` bash
 cd scenario-2
 ```
 
-Start the Scenario by typing the below command in the `GCLOUD Shell` the script expects the user to give the name 
-
-> Note if you try to deploy the same scenario  create with the different name because reusing the same name will create conflicts
+Export the project ID by typing the below command in the `GCLOUD Shell`
 
 ``` bash
-./create-scenario-2.sh <SQL INSTANCE NAME>
+export PROJECT_ID="project-id"
 ```
 
-> Note : It takes too long  to create the `instance` so be patient 🧘‍♂️
+> replace the `project-id` with your project ID
+
+Next configure the `gcloud` to use the project by typing the below command in the shell 
+
+``` bash
+gcloud config set project $PROJECT_ID
+```
+
+Next enable the `Cloud SQL Admin API` by typing the below command in the shell 
+
+``` bash
+gcloud services enable sqladmin.googleapis.com
+```
 
 
+Next initialize the terraform by typing the below command in the shell 
+
+
+``` bash
+terraform init
+```
+
+Next apply the terraform by typing the below command in the shell 
+
+``` bash
+terraform apply -auto-approve -var project-id=$PROJECT_ID
+```
+
+> Note This will take some time to create the resources be patient 🧘 
+
+Once it is done note the ip-address of the `SQL Instance` from the terraform output
 
 ### Scenario info
 
@@ -24,35 +50,35 @@ Google SQL allows developers to set up the database without any hassle by defaul
 
 ### Solution 
 
+First we are going to perform some `reconnaissance` on the `Instance` using nmap, in order to do that we need to first install `nmap` in the `GCLOUD Shell` by typing the below command in the shell
+
+``` bash
+sudo apt-get install nmap -y
+```
+
+Next run the nmap scan by typing the below command in the shell
+
+``` bash
+nmap -Pn <SQL INSTANCE IP>
+```
+
+
 Running `Nmap` Scan on the IP reveals that `MySQL` service  was running on the given instance
 
-![scenario-2a](images/scenario-2a.png)
-
-In order to get remote access to the instance `MySQL client` has to be Installed
-
-We can easily Install the `MYSQL-client` by following the [offical docs](https://dev.mysql.com/doc/refman/8.0/en/installing.html)
-
-
-Now type the below command in the terminal  to connect to the remote SQL instance running in the Google Cloud
 
 
 ```
 mysql -u root -h <ip>
 ```
-![scenario-2b](images/scenario-2b.png)
 
 > Note This scenario assumes there was no authentication for the  database , but in real world may  find some weak credentials 
+
+Enter `\q` to exit the database
+
 ### Clean up
 
 To clean up the `Scenario` type the below  command in the `GCLOUD Shell`
 
-
 ``` bash
-./delete-scenario-2.sh <SQL INSTANCE NAME>
-```
-
-Move into the previous folder by typing the below command in the `GCLOUD Shell`
-
-``` bash
-cd ..
+terraform destroy -auto-approve -var project-id=$PROJECT_ID
 ```

