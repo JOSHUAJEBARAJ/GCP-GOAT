@@ -28,11 +28,11 @@ resource "google_sql_database_instance" "public_instance" {
 
 resource "google_sql_user" "users" {
 name = "root"
-instance = "${google_sql_database_instance.example_instance.name}"
+instance = "${google_sql_database_instance.public_instance.name}"
 host = "%"
 }
 
 output "instance_ip" {
-  value = google_sql_database_instance.example_instance.ip_address[0]
+  value = google_sql_database_instance.public_instance.ip_address[0]
 }
 
