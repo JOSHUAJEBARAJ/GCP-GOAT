@@ -202,7 +202,41 @@ Once it is done click on the below link to clone the repository</p>
 <p>Next export the project id using the below command</p>
 <pre><code class="language-bash">export PROJECT_ID=&quot;project-id&quot;
 </code></pre>
-<p>Next configure the project id using the below command</p>
+<h2 id="configuring-the-cli"><a class="header" href="#configuring-the-cli">Configuring the CLI</a></h2>
+<ul>
+<li>
+<p>Once its is Go to the IAM Section by clicking the the <a href="https://console.cloud.google.com/iam-admin/iam?project=">link</a> and click on the service account</p>
+</li>
+<li>
+<p>Next click on the <code>+CREATE SERVICE ACCOUNT</code> button and Enter <code>GCP GOAT</code> as the service account name and click on <code>CREATE AND CONTINUE</code></p>
+</li>
+<li>
+<p>Next Select the <code>Owner</code> as the role and click on <code>DONE</code></p>
+</li>
+</ul>
+<blockquote>
+<p>Note in the real world its not recommended to use the owner role for the service account but for the ease of demonstration we are using the owner role</p>
+</blockquote>
+<ul>
+<li>Now select the Keys options and click on the <code>ADD KEY</code> and select <code>create new key</code> and select type as JSON </li>
+</ul>
+<blockquote>
+<p>Note : The JSON file contains the sensitive information so make sure to keep it safe </p>
+</blockquote>
+<ul>
+<li>
+<p>Next copy the data and save it in a file named <code>credentials.json</code> in the root directory of the cloned repository</p>
+</li>
+<li>
+<p>Next configure the gcloud cli using the below command</p>
+</li>
+</ul>
+<pre><code class="language-bash">gcloud auth activate-service-account --key-file /filepatth/credentials.json
+</code></pre>
+<blockquote>
+<p>Make sure to replace the filepath with the actual path of the credentials.json file
+Next configure the project id using the below command</p>
+</blockquote>
 <pre><code class="language-bash">gcloud config set project $PROJECT_ID
 </code></pre>
 <p>Next enable the necessary services using the below command</p>
