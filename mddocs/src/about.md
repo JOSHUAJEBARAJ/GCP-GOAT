@@ -15,7 +15,7 @@ GCP-Goat is intentionally vulnerable GCP environment to learn and practice GCP S
 
 ## About the author
 
-GCP goat was created by [Joshua Jebaraj](https://www.joshuajebaraj.com/)
+GCP goat was created by [Joshua Jebaraj](https://joshuajebaraj.com/)
 
 Joshua Jebaraj is a cloud native security researcher and his primary area of interest resides around GCP and Kubernetes Security.He had also Spoken at conferences like BlackHat,Hack in the box,Defcon,Owasp-Seasides,Bsides-Delhi and Eko-party When away from the screen he can be found watching movies and making memes
 
